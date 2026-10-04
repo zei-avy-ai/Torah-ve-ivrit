@@ -14,8 +14,8 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "TorahVeIvrit"
+rootProject.name = "Torah-ve-ivrit"
 
-// Indique à Gradle d'aller chercher dans le sous-dossier app/app
 include(":app")
+
 project(":app").projectDir = file("app/app")
