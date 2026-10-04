@@ -5,6 +5,7 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
@@ -14,4 +15,7 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "TorahVeIvrit"
+
+// Indique à Gradle d'aller chercher dans le sous-dossier app/app
 include(":app")
+project(":app").projectDir = file("app/app")
