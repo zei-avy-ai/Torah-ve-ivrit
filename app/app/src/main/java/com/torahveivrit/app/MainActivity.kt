@@ -183,7 +183,7 @@ private fun TorahVeIvritApp() {
 @Composable
 private fun Home(m: Modifier, completed: List<Boolean>) {
     val context = LocalContext.current
-    val bereshit = remember { enrichFrench(loadBereshitFromAsset(context)) }
+    val bereshit = remember { enrichFrench(loadBereshitFromAsset(context), context) }
     val done = completed.count { it }
     LazyColumn(m.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         item { Text("תורה ועברית", style = MaterialTheme.typography.headlineSmall); Text("Apprendre l'hébreu biblique au rythme de la paracha") }
