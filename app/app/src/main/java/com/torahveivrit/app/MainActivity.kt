@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -68,7 +69,8 @@ class MainActivity : ComponentActivity() {
 @Composable
 private fun TorahVeIvritApp() {
     var selected by remember { mutableIntStateOf(0) }
-    val prefs = remember { getSharedPreferences("progress", Context.MODE_PRIVATE) }
+    val context = LocalContext.current
+    val prefs = remember(context) { context.getSharedPreferences("progress", Context.MODE_PRIVATE) }
     var completed by remember { mutableStateOf((0 until studyDays.size).map { prefs.getBoolean("day_" + it, false) }) }
     fun toggleDay(index: Int) {
         val next = completed.toMutableList()
@@ -111,7 +113,7 @@ private fun Home(m: Modifier, completed: List<Boolean>) {
                 Column(Modifier.padding(16.dp)) {
                     Text("Progression", style = MaterialTheme.typography.titleMedium)
                     Spacer(Modifier.height(8.dp))
-                    LinearProgressIndicator(progress = { done.toFloat() / studyDays.size }, modifier = Modifier.fillMaxWidth())
+                    LinearProgressIndicator(progress = done.toFloat() / studyDays.size, modifier = Modifier.fillMaxWidth())
                     Spacer(Modifier.height(6.dp))
                     Text(done.toString() + " / " + studyDays.size + " journées validées")
                 }
