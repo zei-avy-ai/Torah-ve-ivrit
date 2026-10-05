@@ -1,3 +1,5 @@
+import org.gradle.api.initialization.resolve.RepositoriesMode
+
 pluginManagement {
     repositories {
         google()
@@ -14,8 +16,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Torah-ve-ivrit"
+rootProject.name = "TorahVeIvrit"
 
 include(":app")
-
 project(":app").projectDir = file("app/app")
