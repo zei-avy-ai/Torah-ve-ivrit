@@ -21,6 +21,15 @@ private val sections = listOf(
     Section("Bilan", Icons.Filled.CheckCircle), Section("Sidour", Icons.Filled.Translate),
     Section("Calendrier", Icons.Filled.CalendarMonth)
 )
+private data class Verse(val number: Int, val hebrew: String, val french: String)
+private val bereshit1 = listOf(
+    Verse(1, "בְּרֵאשִׁית בָּרָא אֱלֹהִים אֵת הַשָּׁמַיִם וְאֵת הָאָרֶץ.", "Au commencement, Dieu avait créé le ciel et la terre."),
+    Verse(2, "וְהָאָרֶץ הָיְתָה תֹהוּ וָבֹהוּ, וְחֹשֶׁךְ עַל־פְּנֵי תְהוֹם; וְרוּחַ אֱלֹהִים מְרַחֶפֶת עַל־פְּנֵי הַמָּיִם.", "Or la terre n’était que solitude et chaos ; des ténèbres couvraient la face de l’abîme, et le souffle de Dieu planait sur la face des eaux."),
+    Verse(3, "וַיֹּאמֶר אֱלֹהִים: יְהִי אוֹר; וַיְהִי־אוֹר.", "Dieu dit : « Que la lumière soit ! » Et la lumière fut."),
+    Verse(4, "וַיַּרְא אֱלֹהִים אֶת־הָאוֹר כִּי־טוֹב; וַיַּבְדֵּל אֱלֹהִים בֵּין הָאוֹר וּבֵין הַחֹשֶׁךְ.", "Dieu considéra que la lumière était bonne, et il établit une distinction entre la lumière et les ténèbres."),
+    Verse(5, "וַיִּקְרָא אֱלֹהִים לָאוֹר יוֹם, וְלַחֹשֶׁךְ קָרָא לָיְלָה; וַיְהִי־עֶרֶב וַיְהִי־בֹקֶר, יוֹם אֶחָד.", "Dieu appela la lumière jour, et les ténèbres, il les appela Nuit. Il fut soir, il fut matin, — un jour.")
+)
+
 private val studyDays = listOf(
     "Jour 1 — Lecture" to "Lire le passage hébreu avec ניקוד à voix haute.",
     "Jour 2 — Vocabulaire" to "Repérer les mots nouveaux et leurs racines.",
@@ -77,6 +86,7 @@ private fun Home(m: Modifier, completed: List<Boolean>) {
     LazyColumn(m.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         item { Text("תורה ועברית", style = MaterialTheme.typography.headlineSmall); Text("Apprendre l'hébreu biblique au rythme de la paracha") }
         item { Info("Paracha actuelle", "בראשית — Bereshit") }
+        item { Info("Texte disponible", "Bereshit 1:1–5 est maintenant intégré avec ניקוד et traduction française juive.") }
         item { Info("Programme du jour", if (done < studyDays.size) studyDays[done].first else "Semaine terminée") }
         item {
             Card(Modifier.fillMaxWidth()) {
@@ -109,7 +119,19 @@ private fun Study(title: String, m: Modifier, completed: List<Boolean>, onToggle
                 }
             }
         }
-        item { Info("קטע הלימוד", "Le texte hébreu vocalisé, le vocabulaire et la traduction française seront intégrés dans les données de cours.") }
+        items(bereshit1.size) { i ->
+            val verse = bereshit1[i]
+            Card(Modifier.fillMaxWidth()) {
+                Column(Modifier.padding(16.dp)) {
+                    Text("בראשית 1:" + verse.number, style = MaterialTheme.typography.labelLarge)
+                    Spacer(Modifier.height(6.dp))
+                    Text(verse.hebrew, textAlign = TextAlign.End, modifier = Modifier.fillMaxWidth())
+                    Spacer(Modifier.height(8.dp))
+                    Text(verse.french)
+                }
+            }
+        }
+        item { Info("Source", "Bible du Rabbinat, sous la direction de Zadoc Kahn, édition originale 1899. Texte français du domaine public ; source consultée : Wikisource.") }
     }
 }
 
