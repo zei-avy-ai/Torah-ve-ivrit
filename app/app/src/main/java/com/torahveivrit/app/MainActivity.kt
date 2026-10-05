@@ -75,6 +75,18 @@ private val studyDays = listOf(
     "Jour 6 — Bilan" to "Révision générale et exercice de la semaine."
 )
 
+private fun verseRangeForDay(day: Int, totalVerses: Int): String {
+    if (day >= 5 || totalVerses == 0) return "Révision de l'ensemble du passage"
+    val studyDaysCount = 5
+    val base = totalVerses / studyDaysCount
+    val remainder = totalVerses % studyDaysCount
+    var start = 1
+    for (i in 0 until day) start += base + if (i < remainder) 1 else 0
+    val count = base + if (day < remainder) 1 else 0
+    val end = start + count - 1
+    return "Versets $start–$end"
+}
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -131,7 +143,7 @@ private fun Home(m: Modifier, completed: List<Boolean>) {
                     next.reference + "\nHaftarah séfarade : " + next.haftarahSephardic
             )
         }
-        item { Info("Leçon disponible", "Bereshit 1:1–8 est intégré avec ניקוד et traduction française juive. Le corpus sera étendu par passages vérifiés.") }
+        item { Info("Leçon disponible", "Bereshit 1:1–8 est intégré avec ניקוד et traduction française juive. La répartition des versets est calculée automatiquement sur 5 jours d'étude, avec le 6e jour réservé au bilan.") }
         item { Info("Programme du jour", if (done < studyDays.size) studyDays[done].first else "Semaine terminée") }
         item {
             Card(Modifier.fillMaxWidth()) {
@@ -158,7 +170,10 @@ private fun Study(title: String, m: Modifier, completed: List<Boolean>, onToggle
                 Row(Modifier.fillMaxWidth().padding(16.dp)) {
                     Column(Modifier.weight(1f)) {
                         Text(studyDays[i].first, style = MaterialTheme.typography.titleMedium)
-                        Spacer(Modifier.height(4.dp)); Text(studyDays[i].second)
+                        Spacer(Modifier.height(4.dp))
+                        Text(studyDays[i].second)
+                        Spacer(Modifier.height(4.dp))
+                        Text(verseRangeForDay(i, bereshit1.size), style = MaterialTheme.typography.labelMedium)
                     }
                     Spacer(Modifier.width(8.dp))
                     Checkbox(checked = completed[i], onCheckedChange = { onToggle(i) })
