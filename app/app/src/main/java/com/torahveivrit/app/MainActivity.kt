@@ -216,7 +216,7 @@ private fun Home(m: Modifier, completed: List<Boolean>) {
 @Composable
 private fun Study(title: String, m: Modifier, completed: List<Boolean>, onToggle: (Int) -> Unit) {
     val context = LocalContext.current
-    val bereshit = remember { enrichFrench(loadBereshitFromAsset(context)) }
+    val bereshit = remember { enrichFrench(loadBereshitFromAsset(context), context) }
     LazyColumn(m.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         item { Text(title, style = MaterialTheme.typography.headlineSmall); Text("Paracha בראשית — programme en 6 jours") }
         item { Info("Répartition automatique", "Les versets actuellement disponibles sont répartis sur 5 journées d’étude, puis le 6e jour est consacré au bilan. La répartition est calculée sur l’ensemble de Bereshit 1:1–6:8.") }
