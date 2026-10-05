@@ -30,6 +30,24 @@ private val bereshit1 = listOf(
     Verse(5, "וַיִּקְרָא אֱלֹהִים לָאוֹר יוֹם, וְלַחֹשֶׁךְ קָרָא לָיְלָה; וַיְהִי־עֶרֶב וַיְהִי־בֹקֶר, יוֹם אֶחָד.", "Dieu appela la lumière jour, et les ténèbres, il les appela Nuit. Il fut soir, il fut matin, — un jour.")
 )
 
+private val parashot = listOf(
+    "בראשית — Bereshit", "נח — Noa'h", "לך־לך — Lekh Lekha", "וירא — Vayera",
+    "חיי שרה — Haye Sarah", "תולדות — Toldot", "ויצא — Vayetze", "וישלח — Vayishlah",
+    "וישב — Vayeshev", "מקץ — Mikets", "ויגש — Vayigash", "ויחי — Vayehi",
+    "שמות — Shemot", "וארא — Vaera", "בא — Bo", "בשלח — Beshalah",
+    "יתרו — Yitro", "משפטים — Mishpatim", "תרומה — Terumah", "תצוה — Tetsaveh",
+    "כי תשא — Ki Tissa", "ויקהל — Vayakhel", "פקודי — Pekudei",
+    "ויקרא — Vayikra", "צו — Tsav", "שמיני — Shemini", "תזריע — Tazria",
+    "מצורע — Metsora", "אחרי מות — Aharei Mot", "קדושים — Kedoshim",
+    "אמור — Emor", "בהר — Behar", "בחוקותי — Behoukotaï", "במדבר — Bamidbar",
+    "נשא — Nasso", "בהעלותך — Behaalotekha", "שלח לך — Shelah Lekha",
+    "קרח — Korah", "חקת — Houkat", "בלק — Balak", "פינחס — Pinhas",
+    "מטות — Matot", "מסעי — Massei", "דברים — Devarim", "ואתחנן — Vaethanan",
+    "עקב — Ekev", "ראה — Reeh", "שופטים — Shoftim", "כי תצא — Ki Tetse",
+    "כי תבוא — Ki Tavo", "נצבים — Nitsavim", "וילך — Vayelekh",
+    "האזינו — Haazinou", "וזאת הברכה — Vezot Haberakha"
+)
+
 private val studyDays = listOf(
     "Jour 1 — Lecture" to "Lire le passage hébreu avec ניקוד à voix haute.",
     "Jour 2 — Vocabulaire" to "Repérer les mots nouveaux et leurs racines.",
@@ -85,7 +103,7 @@ private fun Home(m: Modifier, completed: List<Boolean>) {
     val done = completed.count { it }
     LazyColumn(m.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         item { Text("תורה ועברית", style = MaterialTheme.typography.headlineSmall); Text("Apprendre l'hébreu biblique au rythme de la paracha") }
-        item { Info("Paracha actuelle", "בראשית — Bereshit") }
+        item { Info("Cycle des parachiot", parashot.size.toString() + " parachiot référencées. Le contenu détaillé est ajouté progressivement à partir de sources juives vérifiées.") }
         item { Info("Leçon disponible", "Bereshit 1:1–5 est intégré avec ניקוד et traduction française juive.") }
         item { Info("Programme du jour", if (done < studyDays.size) studyDays[done].first else "Semaine terminée") }
         item {
