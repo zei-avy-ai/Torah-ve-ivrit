@@ -86,7 +86,7 @@ private fun Home(m: Modifier, completed: List<Boolean>) {
     LazyColumn(m.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         item { Text("תורה ועברית", style = MaterialTheme.typography.headlineSmall); Text("Apprendre l'hébreu biblique au rythme de la paracha") }
         item { Info("Paracha actuelle", "בראשית — Bereshit") }
-        item { Info("Texte disponible", "Bereshit 1:1–5 est maintenant intégré avec ניקוד et traduction française juive.") }
+        item { Info("Leçon disponible", "Bereshit 1:1–5 est intégré avec ניקוד et traduction française juive.") }
         item { Info("Programme du jour", if (done < studyDays.size) studyDays[done].first else "Semaine terminée") }
         item {
             Card(Modifier.fillMaxWidth()) {
@@ -99,7 +99,7 @@ private fun Home(m: Modifier, completed: List<Boolean>) {
                 }
             }
         }
-        item { Info("Sources", "Textes juifs et traductions juives uniquement. Le contenu sera enrichi progressivement avec des sources autorisées.") }
+        item { Info("Sources", "Textes juifs et traductions juives uniquement. La traduction utilisée ici est celle de la Bible du Rabbinat sous la direction de Zadoc Kahn, édition originale 1899.") }
     }
 }
 
@@ -141,11 +141,11 @@ private fun Exercise(m: Modifier) {
     var checked by remember { mutableStateOf(false) }
     LazyColumn(m.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         item { Text("Exercice de la semaine", style = MaterialTheme.typography.headlineSmall) }
-        item { Info("Lecture", "Lis à voix haute le début de בראשית.") }
+        item { Info("Lecture", "Lis à voix haute בראשית 1:1–5 avec ניקוד, puis compare avec la traduction française.") }
         item {
             Card(Modifier.fillMaxWidth()) {
                 Column(Modifier.padding(16.dp)) {
-                    Text("בראשית ברא אלהים את השמים ואת הארץ", textAlign = TextAlign.End, modifier = Modifier.fillMaxWidth())
+                    Text("בְּרֵאשִׁית בָּרָא אֱלֹהִים אֵת הַשָּׁמַיִם וְאֵת הָאָרֶץ", textAlign = TextAlign.End, modifier = Modifier.fillMaxWidth())
                     Spacer(Modifier.height(12.dp)); Text("Que signifie « אלהים » ?")
                     OutlinedTextField(value = answer, onValueChange = { answer = it }, modifier = Modifier.fillMaxWidth(), singleLine = true)
                     Spacer(Modifier.height(8.dp))
