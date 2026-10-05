@@ -148,7 +148,7 @@ private fun Home(m: Modifier, completed: List<Boolean>) {
                     next.reference + "\nHaftarah séfarade : " + next.haftarahSephardic
             )
         }
-        item { Info("Leçon disponible", "Bereshit 1:1–8 est intégré avec ניקוד et traduction française juive. La répartition des versets est calculée automatiquement sur 5 jours d'étude, avec le 6e jour réservé au bilan.") }
+        item { Info("Leçon disponible", "Bereshit 1:1–13 est intégré avec ניקוד et traduction française juive. La répartition des versets est calculée automatiquement sur 5 jours d'étude, avec le 6e jour réservé au bilan.") }
         item { Info("Programme du jour", if (done < studyDays.size) studyDays[done].first + " — " + verseRangeForDay(done, bereshit1.size) else "Semaine terminée") }
         item {
             Card(Modifier.fillMaxWidth()) {
@@ -229,7 +229,7 @@ private fun Exercise(m: Modifier) {
     var checked by remember { mutableStateOf(false) }
     LazyColumn(m.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         item { Text("Exercice de la semaine", style = MaterialTheme.typography.headlineSmall) }
-        item { Info("Lecture", "Lis à voix haute בראשית 1:1–5 avec ניקוד, puis compare avec la traduction française.") }
+        item { Info("Lecture", "Lis à voix haute בראשית 1:1–13 avec ניקוד, puis compare avec la traduction française.") }
         item {
             Card(Modifier.fillMaxWidth()) {
                 Column(Modifier.padding(16.dp)) {
