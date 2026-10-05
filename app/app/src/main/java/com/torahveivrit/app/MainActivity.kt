@@ -32,7 +32,7 @@ private data class ParashaInfo(
 )
 private val upcomingParashot5787 = listOf(
     ParashaInfo("בְּרֵאשִׁית", "Bereshit", "Genèse 1:1–6:8", "10 octobre 2026", "Isaïe 42:5–21"),
-    ParashaInfo("נֹחַ", "Noa'h", "Genèse 6:9–11:32", "17 octobre 2026", "Isaïe 54:1–55:5"),
+    ParashaInfo("נֹחַ", "Noa'h", "Genèse 6:9–11:32", "17 octobre 2026", "Isaïe 54:1–10"),
     ParashaInfo("לֶךְ־לְךָ", "Lekh Lekha", "Genèse 12:1–17:27", "24 octobre 2026", "Isaïe 40:27–41:16"),
     ParashaInfo("וַיֵּרָא", "Vayera", "Genèse 18:1–22:24", "31 octobre 2026", "II Rois 4:1–37")
 )
@@ -42,7 +42,10 @@ private val bereshit1 = listOf(
     Verse(2, "וְהָאָרֶץ הָיְתָה תֹהוּ וָבֹהוּ, וְחֹשֶׁךְ עַל־פְּנֵי תְהוֹם; וְרוּחַ אֱלֹהִים מְרַחֶפֶת עַל־פְּנֵי הַמָּיִם.", "Or la terre n’était que solitude et chaos ; des ténèbres couvraient la face de l’abîme, et le souffle de Dieu planait sur la face des eaux."),
     Verse(3, "וַיֹּאמֶר אֱלֹהִים: יְהִי אוֹר; וַיְהִי־אוֹר.", "Dieu dit : « Que la lumière soit ! » Et la lumière fut."),
     Verse(4, "וַיַּרְא אֱלֹהִים אֶת־הָאוֹר כִּי־טוֹב; וַיַּבְדֵּל אֱלֹהִים בֵּין הָאוֹר וּבֵין הַחֹשֶׁךְ.", "Dieu considéra que la lumière était bonne, et il établit une distinction entre la lumière et les ténèbres."),
-    Verse(5, "וַיִּקְרָא אֱלֹהִים לָאוֹר יוֹם, וְלַחֹשֶׁךְ קָרָא לָיְלָה; וַיְהִי־עֶרֶב וַיְהִי־בֹקֶר, יוֹם אֶחָד.", "Dieu appela la lumière jour, et les ténèbres, il les appela Nuit. Il fut soir, il fut matin, — un jour.")
+    Verse(5, "וַיִּקְרָא אֱלֹהִים לָאוֹר יוֹם, וְלַחֹשֶׁךְ קָרָא לָיְלָה; וַיְהִי־עֶרֶב וַיְהִי־בֹקֶר, יוֹם אֶחָד.", "Dieu appela la lumière jour, et les ténèbres, il les appela Nuit. Il fut soir, il fut matin, — un jour."),
+    Verse(6, "וַיֹּאמֶר אֱלֹהִים, יְהִי רָקִיעַ בְּתוֹךְ הַמָּיִם, וִיהִי מַבְדִּיל, בֵּין מַיִם לָמָיִם.", "Dieu dit : « Qu’un espace s’étende au milieu des eaux, et forme une barrière entre les unes et les autres. »"),
+    Verse(7, "וַיַּעַשׂ אֱלֹהִים, אֶת־הָרָקִיעַ, וַיַּבְדֵּל בֵּין הַמַּיִם אֲשֶׁר מִתַּחַת לָרָקִיעַ, וּבֵין הַמַּיִם אֲשֶׁר מֵעַל לָרָקִיעַ; וַיְהִי־כֵן.", "Dieu fit l’espace, opéra une séparation entre les eaux qui sont au-dessous et les eaux qui sont au-dessus, et cela demeura ainsi."),
+    Verse(8, "וַיִּקְרָא אֱלֹהִים לָרָקִיעַ, שָׁמָיִם; וַיְהִי־עֶרֶב וַיְהִי־בֹקֶר, יוֹם שֵׁנִי.", "Dieu nomma cet espace le Ciel. Le soir se fit, le matin se fit, — second jour.")
 )
 
 private val parashot = listOf(
@@ -128,7 +131,7 @@ private fun Home(m: Modifier, completed: List<Boolean>) {
                     next.reference + "\nHaftarah séfarade : " + next.haftarahSephardic
             )
         }
-        item { Info("Leçon disponible", "Bereshit 1:1–5 est intégré avec ניקוד et traduction française juive. Le corpus sera étendu par passages.") }
+        item { Info("Leçon disponible", "Bereshit 1:1–8 est intégré avec ניקוד et traduction française juive. Le corpus sera étendu par passages vérifiés.") }
         item { Info("Programme du jour", if (done < studyDays.size) studyDays[done].first else "Semaine terminée") }
         item {
             Card(Modifier.fillMaxWidth()) {
@@ -149,6 +152,7 @@ private fun Home(m: Modifier, completed: List<Boolean>) {
 private fun Study(title: String, m: Modifier, completed: List<Boolean>, onToggle: (Int) -> Unit) {
     LazyColumn(m.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         item { Text(title, style = MaterialTheme.typography.headlineSmall); Text("Paracha בראשית — programme en 6 jours") }
+        item { Info("Répartition automatique", "Les versets actuellement disponibles sont répartis sur 5 journées d’étude, puis le 6e jour est consacré au bilan. La répartition sera recalculée à mesure que le corpus sera complété.") }
         items(studyDays.size) { i ->
             Card(Modifier.fillMaxWidth()) {
                 Row(Modifier.fillMaxWidth().padding(16.dp)) {
