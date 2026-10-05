@@ -14,6 +14,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import org.json.JSONObject
 
 private data class Section(val title: String, val icon: androidx.compose.ui.graphics.vector.ImageVector)
 private val sections = listOf(
@@ -22,7 +23,7 @@ private val sections = listOf(
     Section("Bilan", Icons.Filled.CheckCircle), Section("Sidour", Icons.Filled.Translate),
     Section("Calendrier", Icons.Filled.CalendarMonth)
 )
-private data class Verse(val number: Int, val hebrew: String, val french: String)
+private data class Verse(val number: Int, val hebrew: String, val french: String = "")
 private data class ParashaInfo(
     val hebrew: String,
     val french: String,
@@ -52,6 +53,51 @@ private val bereshit1 = listOf(
     Verse(12, "וַתּוֹצֵא הָאָרֶץ דֶּשֶׁא עֵשֶׂב מַזְרִיעַ זֶרַע לְמִינֵהוּ, וְעֵץ עֹשֶׂה־פְּרִי אֲשֶׁר זַרְעוֹ־בוֹ לְמִינֵהוּ; וַיַּרְא אֱלֹהִים כִּי־טוֹב.", "La terre donna naissance aux végétaux : aux herbes qui développent leur semence selon leur espèce, et aux arbres portant, selon leur espèce, un fruit qui renferme sa semence. Et Dieu considéra que c’était bien."),
     Verse(13, "וַיְהִי־עֶרֶב וַיְהִי־בֹקֶר, יוֹם שְׁלִישִׁי.", "Le soir se fit, le matin se fit, — troisième jour.")
 )
+
+private fun loadBereshitFromAsset(context: Context): List<Verse> {
+    return runCatching {
+        val json = context.assets.open("genesis_hebrew.json").bufferedReader().use { it.readText() }
+        val chapters = JSONObject(json).getJSONArray("chapters")
+        val result = mutableListOf<Verse>()
+        for (chapterIndex in 0 until minOf(6, chapters.length())) {
+            val verses = chapters.getJSONArray(chapterIndex)
+            val maxVerse = if (chapterIndex == 5) minOf(8, verses.length()) else verses.length()
+            for (verseIndex in 0 until maxVerse) {
+                val item = verses.getJSONObject(verseIndex)
+                result.add(
+                    Verse(
+                        number = chapterIndex * 1000 + verseIndex + 1,
+                        hebrew = item.getString("hebrew")
+                    )
+                )
+            }
+        }
+        result
+    }.getOrDefault(bereshit1)
+}
+
+private val frenchBereshit1to13 = mapOf(
+    1 to "Au commencement, Dieu avait créé le ciel et la terre.",
+    2 to "Or la terre n’était que solitude et chaos ; des ténèbres couvraient la face de l’abîme, et le souffle de Dieu planait sur la face des eaux.",
+    3 to "Dieu dit : « Que la lumière soit ! » Et la lumière fut.",
+    4 to "Dieu considéra que la lumière était bonne, et il établit une distinction entre la lumière et les ténèbres.",
+    5 to "Dieu appela la lumière jour, et les ténèbres, il les appela Nuit. Il fut soir, il fut matin, — un jour.",
+    6 to "Dieu dit : « Qu’un espace s’étende au milieu des eaux, et forme une barrière entre les unes et les autres. »",
+    7 to "Dieu fit l’espace, opéra une séparation entre les eaux qui sont au-dessous et les eaux qui sont au-dessus, et cela demeura ainsi.",
+    8 to "Dieu nomma cet espace le Ciel. Le soir se fit, le matin se fit, — second jour.",
+    9 to "Dieu dit : « Que les eaux répandues sous le ciel se réunissent sur un même point, et que le sol apparaisse. » Cela s’accomplit.",
+    10 to "Dieu nomma le sol la Terre, et l’agglomération des eaux, il la nomma les Mers. Et Dieu considéra que c’était bien.",
+    11 to "Dieu dit : « Que la terre produise des végétaux, savoir : des herbes renfermant une semence ; des arbres fruitiers portant, selon leur espèce, un fruit qui perpétue sa semence sur la terre. » Et cela s’accomplit.",
+    12 to "La terre donna naissance aux végétaux : aux herbes qui développent leur semence selon leur espèce, et aux arbres portant, selon leur espèce, un fruit qui renferme sa semence. Et Dieu considéra que c’était bien.",
+    13 to "Le soir se fit, le matin se fit, — troisième jour."
+)
+
+private fun enrichFrench(verses: List<Verse>): List<Verse> =
+    verses.map { verse ->
+        val chapter = verse.number / 1000
+        val number = verse.number % 1000
+        if (chapter == 1 && number in 1..13) verse.copy(french = frenchBereshit1to13[number] ?: "") else verse
+    }
 
 private val parashot = listOf(
     "בראשית — Bereshit", "נח — Noa'h", "לך־לך — Lekh Lekha", "וירא — Vayera",
@@ -136,6 +182,8 @@ private fun TorahVeIvritApp() {
 
 @Composable
 private fun Home(m: Modifier, completed: List<Boolean>) {
+    val context = LocalContext.current
+    val bereshit = remember { enrichFrench(loadBereshitFromAsset(context)) }
     val done = completed.count { it }
     LazyColumn(m.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         item { Text("תורה ועברית", style = MaterialTheme.typography.headlineSmall); Text("Apprendre l'hébreu biblique au rythme de la paracha") }
@@ -149,7 +197,7 @@ private fun Home(m: Modifier, completed: List<Boolean>) {
             )
         }
         item { Info("Leçon disponible", "Bereshit 1:1–13 est intégré avec ניקוד et traduction française juive. La répartition des versets est calculée automatiquement sur 5 jours d'étude, avec le 6e jour réservé au bilan.") }
-        item { Info("Programme du jour", if (done < studyDays.size) studyDays[done].first + " — " + verseRangeForDay(done, bereshit1.size) else "Semaine terminée") }
+        item { Info("Programme du jour", if (done < studyDays.size) studyDays[done].first + " — " + verseRangeForDay(done, bereshit.size) else "Semaine terminée") }
         item {
             Card(Modifier.fillMaxWidth()) {
                 Column(Modifier.padding(16.dp)) {
@@ -167,6 +215,8 @@ private fun Home(m: Modifier, completed: List<Boolean>) {
 
 @Composable
 private fun Study(title: String, m: Modifier, completed: List<Boolean>, onToggle: (Int) -> Unit) {
+    val context = LocalContext.current
+    val bereshit = remember { enrichFrench(loadBereshitFromAsset(context)) }
     LazyColumn(m.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         item { Text(title, style = MaterialTheme.typography.headlineSmall); Text("Paracha בראשית — programme en 6 jours") }
         item { Info("Répartition automatique", "Les versets actuellement disponibles sont répartis sur 5 journées d’étude, puis le 6e jour est consacré au bilan. La répartition sera recalculée à mesure que le corpus sera complété.") }
@@ -178,22 +228,22 @@ private fun Study(title: String, m: Modifier, completed: List<Boolean>, onToggle
                         Spacer(Modifier.height(4.dp))
                         Text(studyDays[i].second)
                         Spacer(Modifier.height(4.dp))
-                        Text(verseRangeForDay(i, bereshit1.size), style = MaterialTheme.typography.labelMedium)
+                        Text(verseRangeForDay(i, bereshit.size), style = MaterialTheme.typography.labelMedium)
                     }
                     Spacer(Modifier.width(8.dp))
                     Checkbox(checked = completed[i], onCheckedChange = { onToggle(i) })
                 }
             }
         }
-        items(bereshit1.size) { i ->
-            val verse = bereshit1[i]
+        items(bereshit.size) { i ->
+            val verse = bereshit[i]
             Card(Modifier.fillMaxWidth()) {
                 Column(Modifier.padding(16.dp)) {
-                    Text("בראשית 1:" + verse.number, style = MaterialTheme.typography.labelLarge)
+                    Text("בראשית " + (verse.number / 1000) + ":" + (verse.number % 1000), style = MaterialTheme.typography.labelLarge)
                     Spacer(Modifier.height(6.dp))
                     Text(verse.hebrew, textAlign = TextAlign.End, modifier = Modifier.fillMaxWidth())
                     Spacer(Modifier.height(8.dp))
-                    Text(verse.french)
+                    if (verse.french.isNotBlank()) Text(verse.french) else Text("Traduction française juive : intégration en cours.", style = MaterialTheme.typography.labelSmall)
                 }
             }
         }
