@@ -144,7 +144,7 @@ private fun Home(m: Modifier, completed: List<Boolean>) {
             )
         }
         item { Info("Leçon disponible", "Bereshit 1:1–8 est intégré avec ניקוד et traduction française juive. La répartition des versets est calculée automatiquement sur 5 jours d'étude, avec le 6e jour réservé au bilan.") }
-        item { Info("Programme du jour", if (done < studyDays.size) studyDays[done].first else "Semaine terminée") }
+        item { Info("Programme du jour", if (done < studyDays.size) studyDays[done].first + " — " + verseRangeForDay(done, bereshit1.size) else "Semaine terminée") }
         item {
             Card(Modifier.fillMaxWidth()) {
                 Column(Modifier.padding(16.dp)) {
