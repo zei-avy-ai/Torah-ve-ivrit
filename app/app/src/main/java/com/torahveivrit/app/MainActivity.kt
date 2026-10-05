@@ -46,6 +46,11 @@ private val bereshit1 = listOf(
     Verse(6, "וַיֹּאמֶר אֱלֹהִים, יְהִי רָקִיעַ בְּתוֹךְ הַמָּיִם, וִיהִי מַבְדִּיל, בֵּין מַיִם לָמָיִם.", "Dieu dit : « Qu’un espace s’étende au milieu des eaux, et forme une barrière entre les unes et les autres. »"),
     Verse(7, "וַיַּעַשׂ אֱלֹהִים, אֶת־הָרָקִיעַ, וַיַּבְדֵּל בֵּין הַמַּיִם אֲשֶׁר מִתַּחַת לָרָקִיעַ, וּבֵין הַמַּיִם אֲשֶׁר מֵעַל לָרָקִיעַ; וַיְהִי־כֵן.", "Dieu fit l’espace, opéra une séparation entre les eaux qui sont au-dessous et les eaux qui sont au-dessus, et cela demeura ainsi."),
     Verse(8, "וַיִּקְרָא אֱלֹהִים לָרָקִיעַ, שָׁמָיִם; וַיְהִי־עֶרֶב וַיְהִי־בֹקֶר, יוֹם שֵׁנִי.", "Dieu nomma cet espace le Ciel. Le soir se fit, le matin se fit, — second jour.")
+    Verse(9, "וַיֹּאמֶר אֱלֹהִים, יִקָּווּ הַמַּיִם מִתַּחַת הַשָּׁמַיִם אֶל־מָקוֹם אֶחָד, וְתֵרָאֶה הַיַּבָּשָׁה; וַיְהִי־כֵן.", "Dieu dit : « Que les eaux répandues sous le ciel se réunissent sur un même point, et que le sol apparaisse. » Cela s’accomplit.")
+    Verse(10, "וַיִּקְרָא אֱלֹהִים לַיַּבָּשָׁה אֶרֶץ, וּלְמִקְוֵה הַמַּיִם קָרָא יַמִּים; וַיַּרְא אֱלֹהִים כִּי־טוֹב.", "Dieu nomma le sol la Terre, et l’agglomération des eaux, il la nomma les Mers. Et Dieu considéra que c’était bien.")
+    Verse(11, "וַיֹּאמֶר אֱלֹהִים, תַּדְשֵׁא הָאָרֶץ דֶּשֶׁא עֵשֶׂב מַזְרִיעַ זֶרַע, עֵץ פְּרִי עֹשֶׂה פְּרִי לְמִינוֹ, אֲשֶׁר זַרְעוֹ־בוֹ עַל־הָאָרֶץ; וַיְהִי־כֵן.", "Dieu dit : « Que la terre produise des végétaux, savoir : des herbes renfermant une semence ; des arbres fruitiers portant, selon leur espèce, un fruit qui perpétue sa semence sur la terre. » Et cela s’accomplit.")
+    Verse(12, "וַתּוֹצֵא הָאָרֶץ דֶּשֶׁא עֵשֶׂב מַזְרִיעַ זֶרַע לְמִינֵהוּ, וְעֵץ עֹשֶׂה־פְּרִי אֲשֶׁר זַרְעוֹ־בוֹ לְמִינֵהוּ; וַיַּרְא אֱלֹהִים כִּי־טוֹב.", "La terre donna naissance aux végétaux : aux herbes qui développent leur semence selon leur espèce, et aux arbres portant, selon leur espèce, un fruit qui renferme sa semence. Et Dieu considéra que c’était bien.")
+    Verse(13, "וַיְהִי־עֶרֶב וַיְהִי־בֹקֶר, יוֹם שְׁלִישִׁי.", "Le soir se fit, le matin se fit, — troisième jour.")
 )
 
 private val parashot = listOf(
