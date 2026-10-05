@@ -228,12 +228,14 @@ private fun Exercise(m: Modifier) {
         item {
             Card(Modifier.fillMaxWidth()) {
                 Column(Modifier.padding(16.dp)) {
-                    Text("בְּרֵאשִׁית בָּרָא אֱלֹהִים אֵת הַשָּׁמַיִם וְאֵת הָאָרֶץ", textAlign = TextAlign.End, modifier = Modifier.fillMaxWidth())
+                    Text("בְּרֵאשִׁית בָּרָא אֱלֹהִים", textAlign = TextAlign.End, modifier = Modifier.fillMaxWidth())
+                    Spacer(Modifier.height(6.dp))
+                    Text("Exercice de vocabulaire : identifie le mot אֱלֹהִים et son sens.", textAlign = TextAlign.End, modifier = Modifier.fillMaxWidth())
                     Spacer(Modifier.height(12.dp)); Text("Que signifie « אלהים » ?")
                     OutlinedTextField(value = answer, onValueChange = { answer = it }, modifier = Modifier.fillMaxWidth(), singleLine = true)
                     Spacer(Modifier.height(8.dp))
                     Button(onClick = { checked = true }) { Text("Vérifier") }
-                    if (checked) { Spacer(Modifier.height(8.dp)); Text(if (answer.trim().lowercase() == "dieu") "Correct." else "Réponse attendue : Dieu.") }
+                    if (checked) { Spacer(Modifier.height(8.dp)); Text(if (answer.trim().lowercase() in listOf("dieu", "god")) "Correct." else "Réponse attendue : Dieu.") }
                 }
             }
         }
