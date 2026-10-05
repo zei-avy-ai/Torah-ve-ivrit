@@ -196,7 +196,7 @@ private fun Home(m: Modifier, completed: List<Boolean>) {
                     next.reference + "\nHaftarah séfarade : " + next.haftarahSephardic
             )
         }
-        item { Info("Leçon disponible", "Le passage de Bereshit 1:1–6:8 est intégré en hébreu vocalisé. La traduction française juive de Zadoc Kahn est déjà intégrée pour Bereshit 1:1–13 ; elle sera associée au reste du corpus lors de la poursuite de l'intégration. La répartition des versets est calculée automatiquement sur 5 jours d'étude, avec le 6e jour réservé au bilan.") }
+        item { Info("Leçon disponible", "Le passage de Bereshit 1:1–6:8 est intégré en hébreu vocalisé. La traduction française juive de Zadoc Kahn est intégrée pour l’ensemble de Bereshit 1:1–6:8. La répartition des versets est calculée automatiquement sur 5 jours d'étude, avec le 6e jour réservé au bilan.") }
         item { Info("Programme du jour", if (done < studyDays.size) studyDays[done].first + " — " + verseRangeForDay(done, bereshit.size) else "Semaine terminée") }
         item {
             Card(Modifier.fillMaxWidth()) {
@@ -219,7 +219,7 @@ private fun Study(title: String, m: Modifier, completed: List<Boolean>, onToggle
     val bereshit = remember { enrichFrench(loadBereshitFromAsset(context)) }
     LazyColumn(m.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         item { Text(title, style = MaterialTheme.typography.headlineSmall); Text("Paracha בראשית — programme en 6 jours") }
-        item { Info("Répartition automatique", "Les versets actuellement disponibles sont répartis sur 5 journées d’étude, puis le 6e jour est consacré au bilan. La répartition sera recalculée à mesure que le corpus sera complété.") }
+        item { Info("Répartition automatique", "Les versets actuellement disponibles sont répartis sur 5 journées d’étude, puis le 6e jour est consacré au bilan. La répartition est calculée sur l’ensemble de Bereshit 1:1–6:8.") }
         items(studyDays.size) { i ->
             Card(Modifier.fillMaxWidth()) {
                 Row(Modifier.fillMaxWidth().padding(16.dp)) {
@@ -247,7 +247,7 @@ private fun Study(title: String, m: Modifier, completed: List<Boolean>, onToggle
                 }
             }
         }
-        item { Info("Source", "Bible du Rabbinat, sous la direction de Zadoc Kahn, édition originale 1899. Texte français du domaine public ; source consultée : Wikisource.") }
+        item { Info("Source", "Bible du Rabbinat, sous la direction de Zadoc Kahn, édition originale 1899. Texte français du domaine public ; source : Bible du Rabbinat, Zadoc Kahn, 1899, consultée via Wikisource.") }
     }
 }
 
@@ -331,7 +331,7 @@ private fun Calendar(m: Modifier, completed: List<Boolean>) {
         item { Info("5787 — prochaines parachiot", "10 oct. — Bereshit\n17 oct. — Noa'h\n24 oct. — Lekh Lekha\n31 oct. — Vayera") }
         item { Info("Cycle de lecture", "La lecture annuelle recommence avec Bereshit après Sim'hat Torah. Pour 5787, Bereshit est lue le 10 octobre 2026.") }
         item { Info("Étude", done.toString() + " / " + studyDays.size + " journées validées.") }
-        item { Info("Calendrier hébraïque complet", "La prochaine étape sera d'intégrer les dates hébraïques et les fêtes directement dans l'application, sans dépendance à une connexion réseau.") }
+        item { Info("Calendrier hébraïque complet", "Les dates de la paracha Bereshit et son passage d’étude sont intégrés ; le calendrier hébraïque complet sera traité ensuite.") }
     }
 }
 
