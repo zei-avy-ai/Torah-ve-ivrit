@@ -76,28 +76,28 @@ private fun loadBereshitFromAsset(context: Context): List<Verse> {
     }.getOrDefault(bereshit1)
 }
 
-private val frenchBereshit1to13 = mapOf(
-    1 to "Au commencement, Dieu avait créé le ciel et la terre.",
-    2 to "Or la terre n’était que solitude et chaos ; des ténèbres couvraient la face de l’abîme, et le souffle de Dieu planait sur la face des eaux.",
-    3 to "Dieu dit : « Que la lumière soit ! » Et la lumière fut.",
-    4 to "Dieu considéra que la lumière était bonne, et il établit une distinction entre la lumière et les ténèbres.",
-    5 to "Dieu appela la lumière jour, et les ténèbres, il les appela Nuit. Il fut soir, il fut matin, — un jour.",
-    6 to "Dieu dit : « Qu’un espace s’étende au milieu des eaux, et forme une barrière entre les unes et les autres. »",
-    7 to "Dieu fit l’espace, opéra une séparation entre les eaux qui sont au-dessous et les eaux qui sont au-dessus, et cela demeura ainsi.",
-    8 to "Dieu nomma cet espace le Ciel. Le soir se fit, le matin se fit, — second jour.",
-    9 to "Dieu dit : « Que les eaux répandues sous le ciel se réunissent sur un même point, et que le sol apparaisse. » Cela s’accomplit.",
-    10 to "Dieu nomma le sol la Terre, et l’agglomération des eaux, il la nomma les Mers. Et Dieu considéra que c’était bien.",
-    11 to "Dieu dit : « Que la terre produise des végétaux, savoir : des herbes renfermant une semence ; des arbres fruitiers portant, selon leur espèce, un fruit qui perpétue sa semence sur la terre. » Et cela s’accomplit.",
-    12 to "La terre donna naissance aux végétaux : aux herbes qui développent leur semence selon leur espèce, et aux arbres portant, selon leur espèce, un fruit qui renferme sa semence. Et Dieu considéra que c’était bien.",
-    13 to "Le soir se fit, le matin se fit, — troisième jour."
-)
+private fun loadFrenchBereshit(context: Context): Map<String, String> {
+    return runCatching {
+        val json = context.assets.open("genesis_french_zadoc.json").bufferedReader().use { it.readText() }
+        val translations = JSONObject(json).getJSONObject("translations")
+        buildMap {
+            val keys = translations.keys()
+            while (keys.hasNext()) {
+                val key = keys.next()
+                put(key, translations.getString(key))
+            }
+        }
+    }.getOrDefault(emptyMap())
+}
 
-private fun enrichFrench(verses: List<Verse>): List<Verse> =
-    verses.map { verse ->
+private fun enrichFrench(verses: List<Verse>, context: Context): List<Verse> {
+    val french = loadFrenchBereshit(context)
+    return verses.map { verse ->
         val chapter = verse.number / 1000
         val number = verse.number % 1000
-        if (chapter == 1 && number in 1..13) verse.copy(french = frenchBereshit1to13[number] ?: "") else verse
+        verse.copy(french = french["$chapter:$number"].orEmpty())
     }
+}
 
 private val parashot = listOf(
     "בראשית — Bereshit", "נח — Noa'h", "לך־לך — Lekh Lekha", "וירא — Vayera",
