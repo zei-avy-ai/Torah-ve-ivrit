@@ -196,7 +196,7 @@ private fun Home(m: Modifier, completed: List<Boolean>) {
                     next.reference + "\nHaftarah séfarade : " + next.haftarahSephardic
             )
         }
-        item { Info("Leçon disponible", "Bereshit 1:1–13 est intégré avec ניקוד et traduction française juive. La répartition des versets est calculée automatiquement sur 5 jours d'étude, avec le 6e jour réservé au bilan.") }
+        item { Info("Leçon disponible", "Le passage de Bereshit 1:1–6:8 est intégré en hébreu vocalisé. La traduction française juive de Zadoc Kahn est déjà intégrée pour Bereshit 1:1–13 ; elle sera associée au reste du corpus lors de la poursuite de l'intégration. La répartition des versets est calculée automatiquement sur 5 jours d'étude, avec le 6e jour réservé au bilan.") }
         item { Info("Programme du jour", if (done < studyDays.size) studyDays[done].first + " — " + verseRangeForDay(done, bereshit.size) else "Semaine terminée") }
         item {
             Card(Modifier.fillMaxWidth()) {
@@ -209,7 +209,7 @@ private fun Home(m: Modifier, completed: List<Boolean>) {
                 }
             }
         }
-        item { Info("Sources", "Textes juifs et traductions juives uniquement. La traduction utilisée ici est celle de la Bible du Rabbinat sous la direction de Zadoc Kahn, édition originale 1899.") }
+        item { Info("Sources", "Textes juifs et traductions juives uniquement. Hébreu vocalisé : texte massorétique issu de l’export Sefaria. Traduction française : Bible du Rabbinat sous la direction de Zadoc Kahn, édition originale 1899.") }
     }
 }
 
