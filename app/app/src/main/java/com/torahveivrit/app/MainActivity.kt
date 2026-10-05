@@ -23,6 +23,20 @@ private val sections = listOf(
     Section("Calendrier", Icons.Filled.CalendarMonth)
 )
 private data class Verse(val number: Int, val hebrew: String, val french: String)
+private data class ParashaInfo(
+    val hebrew: String,
+    val french: String,
+    val reference: String,
+    val date: String,
+    val haftarahSephardic: String
+)
+private val upcomingParashot5787 = listOf(
+    ParashaInfo("בְּרֵאשִׁית", "Bereshit", "Genèse 1:1–6:8", "10 octobre 2026", "Isaïe 42:5–21"),
+    ParashaInfo("נֹחַ", "Noa'h", "Genèse 6:9–11:32", "17 octobre 2026", "Isaïe 54:1–55:5"),
+    ParashaInfo("לֶךְ־לְךָ", "Lekh Lekha", "Genèse 12:1–17:27", "24 octobre 2026", "Isaïe 40:27–41:16"),
+    ParashaInfo("וַיֵּרָא", "Vayera", "Genèse 18:1–22:24", "31 octobre 2026", "II Rois 4:1–37")
+)
+
 private val bereshit1 = listOf(
     Verse(1, "בְּרֵאשִׁית בָּרָא אֱלֹהִים אֵת הַשָּׁמַיִם וְאֵת הָאָרֶץ.", "Au commencement, Dieu avait créé le ciel et la terre."),
     Verse(2, "וְהָאָרֶץ הָיְתָה תֹהוּ וָבֹהוּ, וְחֹשֶׁךְ עַל־פְּנֵי תְהוֹם; וְרוּחַ אֱלֹהִים מְרַחֶפֶת עַל־פְּנֵי הַמָּיִם.", "Or la terre n’était que solitude et chaos ; des ténèbres couvraient la face de l’abîme, et le souffle de Dieu planait sur la face des eaux."),
@@ -91,7 +105,7 @@ private fun TorahVeIvritApp() {
         when (selected) {
             0 -> Home(Modifier.padding(p), completed)
             1 -> Study("Torah", Modifier.padding(p), completed, ::toggleDay)
-            2 -> Study("Haftarah", Modifier.padding(p), completed, ::toggleDay)
+            2 -> Haftarah(Modifier.padding(p))
             3 -> Exercise(Modifier.padding(p))
             4 -> Review(Modifier.padding(p), completed)
             5 -> Siddur(Modifier.padding(p))
@@ -105,8 +119,16 @@ private fun Home(m: Modifier, completed: List<Boolean>) {
     val done = completed.count { it }
     LazyColumn(m.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         item { Text("תורה ועברית", style = MaterialTheme.typography.headlineSmall); Text("Apprendre l'hébreu biblique au rythme de la paracha") }
-        item { Info("Cycle des parachiot", parashot.size.toString() + " parachiot référencées. Le contenu détaillé est ajouté progressivement à partir de sources juives vérifiées.") }
-        item { Info("Leçon disponible", "Bereshit 1:1–5 est intégré avec ניקוד et traduction française juive.") }
+        item { Info("Cycle des parachiot", parashot.size.toString() + " parachiot référencées dans le cycle annuel.") }
+        item {
+            val next = upcomingParashot5787.first()
+            Info(
+                "Prochaine paracha",
+                next.hebrew + " — " + next.french + " • " + next.date + "\n" +
+                    next.reference + "\nHaftarah séfarade : " + next.haftarahSephardic
+            )
+        }
+        item { Info("Leçon disponible", "Bereshit 1:1–5 est intégré avec ניקוד et traduction française juive. Le corpus sera étendu par passages.") }
         item { Info("Programme du jour", if (done < studyDays.size) studyDays[done].first else "Semaine terminée") }
         item {
             Card(Modifier.fillMaxWidth()) {
@@ -152,6 +174,28 @@ private fun Study(title: String, m: Modifier, completed: List<Boolean>, onToggle
             }
         }
         item { Info("Source", "Bible du Rabbinat, sous la direction de Zadoc Kahn, édition originale 1899. Texte français du domaine public ; source consultée : Wikisource.") }
+    }
+}
+
+@Composable
+private fun Haftarah(m: Modifier) {
+    LazyColumn(m.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        item {
+            Text("Haftarah", style = MaterialTheme.typography.headlineSmall)
+            Text("Référence séfarade pour la paracha Bereshit")
+        }
+        item {
+            Info(
+                "בראשית — Bereshit",
+                "Isaïe 42:5–21\n\nLecture séfarade indiquée pour Bereshit. Le texte hébreu et sa traduction juive seront intégrés après vérification de la source et de l'édition."
+            )
+        }
+        item {
+            Info(
+                "Principe de l'application",
+                "Aucun texte non vérifié n'est ajouté. Les contenus doivent provenir de sources juives identifiées et respecter la priorité séfarade tunisienne."
+            )
+        }
     }
 }
 
@@ -206,12 +250,13 @@ private fun Siddur(m: Modifier) {
 @Composable
 private fun Calendar(m: Modifier, completed: List<Boolean>) {
     val done = completed.count { it }
-    Page(m, "Calendrier", "", listOf(
-        "Cycle annuel" to "Le programme suit le cycle des parachiot.",
-        "Semaine actuelle" to "בראשית — Bereshit.",
-        "Étude" to (done.toString() + " / " + studyDays.size + " journées validées."),
-        "Prochaine étape" to "Intégrer le calendrier hébraïque et les dates des parachiot."
-    ))
+    LazyColumn(m.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        item { Text("Calendrier", style = MaterialTheme.typography.headlineSmall) }
+        item { Info("5787 — prochaines parachiot", "10 oct. — Bereshit\n17 oct. — Noa'h\n24 oct. — Lekh Lekha\n31 oct. — Vayera") }
+        item { Info("Cycle de lecture", "La lecture annuelle recommence avec Bereshit après Sim'hat Torah. Pour 5787, Bereshit est lue le 10 octobre 2026.") }
+        item { Info("Étude", done.toString() + " / " + studyDays.size + " journées validées.") }
+        item { Info("Calendrier hébraïque complet", "La prochaine étape sera d'intégrer les dates hébraïques et les fêtes directement dans l'application, sans dépendance à une connexion réseau.") }
+    }
 }
 
 @Composable
