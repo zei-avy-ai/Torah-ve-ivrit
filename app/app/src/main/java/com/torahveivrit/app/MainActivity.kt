@@ -34,7 +34,7 @@ private data class ParashaInfo(
 // Calendrier de diaspora 5787 : dates à maintenir à partir d'une source de calendrier vérifiée.
 private val upcomingParashot5787 = listOf(
     ParashaInfo("חַיֵּי שָׂרָה", "Haye Sarah", "Genèse 23:1–25:18", "7 novembre 2026", "I Rois 1:1–31"),
-    ParashaInfo("תּוֹלְדֹת", "Toldot", "Genèse 25:19–28:9", "14 novembre 2026", "I Samuel 20:18–42"),
+    ParashaInfo("תּוֹלְדֹת", "Toldot", "Genèse 25:19–28:9", "14 novembre 2026", "Malachie 1:1–2:7"),
     ParashaInfo("וַיֵּצֵא", "Vayetze", "Genèse 28:10–32:3", "21 novembre 2026", "Osée 12:13–14:10"),
     ParashaInfo("וַיִּשְׁלַח", "Vayishlah", "Genèse 32:4–36:43", "28 novembre 2026", "Obadia 1:1–21")
 )
@@ -186,6 +186,7 @@ private fun Home(m: Modifier, completed: List<Boolean>) {
     val context = LocalContext.current
     val bereshit = remember { enrichFrench(loadBereshitFromAsset(context), context) }
     val done = completed.count { it }
+    val nextDay = completed.indexOfFirst { !it }
     LazyColumn(m.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         item { Text("תורה ועברית", style = MaterialTheme.typography.headlineSmall); Text("Apprendre l'hébreu biblique au rythme de la paracha") }
         item { Info("Cycle des parachiot", parashot.size.toString() + " parachiot référencées dans le cycle annuel.") }
@@ -198,7 +199,7 @@ private fun Home(m: Modifier, completed: List<Boolean>) {
             )
         }
         item { Info("Leçon disponible", "Le passage de Bereshit 1:1–6:8 est intégré en hébreu vocalisé. La traduction française juive de Zadoc Kahn est intégrée pour l’ensemble de Bereshit 1:1–6:8. La répartition des versets est calculée automatiquement sur 5 jours d'étude, avec le 6e jour réservé au bilan.") }
-        item { Info("Programme du jour", if (done < studyDays.size) studyDays[done].first + " — " + verseRangeForDay(done, bereshit.size) else "Semaine terminée") }
+        item { Info("Programme du jour", if (nextDay >= 0) studyDays[nextDay].first + " — " + verseRangeForDay(nextDay, bereshit.size) else "Semaine terminée") }
         item {
             Card(Modifier.fillMaxWidth()) {
                 Column(Modifier.padding(16.dp)) {
@@ -330,7 +331,7 @@ private fun Calendar(m: Modifier, completed: List<Boolean>) {
     LazyColumn(m.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         item { Text("Calendrier", style = MaterialTheme.typography.headlineSmall) }
         item { Info("5787 — prochaines parachiot (diaspora)", upcomingParashot5787.joinToString("\n") { it.date + " — " + it.french + " (" + it.reference + ")" }) }
-        item { Info("Cycle de lecture", "La lecture annuelle recommence avec Bereshit après Sim'hat Torah. Pour 5787, Bereshit est lue le 10 octobre 2026.") }
+        item { Info("Cycle de lecture", "Les dates affichées suivent le calendrier de diaspora 5787. La paracha est lue le Chabbat indiqué.") }
         item { Info("Étude", done.toString() + " / " + studyDays.size + " journées validées.") }
         item { Info("Calendrier hébraïque complet", "Les dates de la paracha Bereshit et son passage d’étude sont intégrés ; le calendrier hébraïque complet sera traité ensuite.") }
     }
