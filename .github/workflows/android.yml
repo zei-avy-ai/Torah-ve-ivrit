@@ -13,9 +13,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Verify bundled web app
+      - name: Extract web app archive
         run: |
-          test -s app/app/src/main/assets/web/index.html || (echo "Missing Claude web app: upload extracted ZIP contents to app/app/src/main/assets/web/" && exit 1)
+          test -s hebreu-app-installable.zip || (echo "Missing hebreu-app-installable.zip at repository root" && exit 1)
+          mkdir -p /tmp/torah-web app/app/src/main/assets/web
+          unzip -o hebreu-app-installable.zip -d /tmp/torah-web
+          cp /tmp/torah-web/index.html /tmp/torah-web/manifest.webmanifest /tmp/torah-web/sw.js /tmp/torah-web/apple-touch-icon.png /tmp/torah-web/favicon.png /tmp/torah-web/icon-192.png /tmp/torah-web/icon-512.png /tmp/torah-web/icon-maskable-512.png app/app/src/main/assets/web/
+          test -s app/app/src/main/assets/web/index.html
           test -s app/app/src/main/assets/web/manifest.webmanifest
       - name: Set up JDK 17
         uses: actions/setup-java@v4
