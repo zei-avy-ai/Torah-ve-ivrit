@@ -31,11 +31,12 @@ private data class ParashaInfo(
     val date: String,
     val haftarahSephardic: String
 )
+// Calendrier de diaspora 5787 : dates à maintenir à partir d'une source de calendrier vérifiée.
 private val upcomingParashot5787 = listOf(
-    ParashaInfo("בְּרֵאשִׁית", "Bereshit", "Genèse 1:1–6:8", "10 octobre 2026", "Isaïe 42:5–21"),
-    ParashaInfo("נֹחַ", "Noa'h", "Genèse 6:9–11:32", "17 octobre 2026", "Isaïe 54:1–10"),
-    ParashaInfo("לֶךְ־לְךָ", "Lekh Lekha", "Genèse 12:1–17:27", "24 octobre 2026", "Isaïe 40:27–41:16"),
-    ParashaInfo("וַיֵּרָא", "Vayera", "Genèse 18:1–22:24", "31 octobre 2026", "II Rois 4:1–37")
+    ParashaInfo("חַיֵּי שָׂרָה", "Haye Sarah", "Genèse 23:1–25:18", "7 novembre 2026", "I Rois 1:1–31"),
+    ParashaInfo("תּוֹלְדֹת", "Toldot", "Genèse 25:19–28:9", "14 novembre 2026", "I Samuel 20:18–42"),
+    ParashaInfo("וַיֵּצֵא", "Vayetze", "Genèse 28:10–32:3", "21 novembre 2026", "Osée 12:13–14:10"),
+    ParashaInfo("וַיִּשְׁלַח", "Vayishlah", "Genèse 32:4–36:43", "28 novembre 2026", "Obadia 1:1–21")
 )
 
 private val bereshit1 = listOf(
@@ -328,7 +329,7 @@ private fun Calendar(m: Modifier, completed: List<Boolean>) {
     val done = completed.count { it }
     LazyColumn(m.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         item { Text("Calendrier", style = MaterialTheme.typography.headlineSmall) }
-        item { Info("5787 — prochaines parachiot", "10 oct. — Bereshit\n17 oct. — Noa'h\n24 oct. — Lekh Lekha\n31 oct. — Vayera") }
+        item { Info("5787 — prochaines parachiot (diaspora)", upcomingParashot5787.joinToString("\n") { it.date + " — " + it.french + " (" + it.reference + ")" }) }
         item { Info("Cycle de lecture", "La lecture annuelle recommence avec Bereshit après Sim'hat Torah. Pour 5787, Bereshit est lue le 10 octobre 2026.") }
         item { Info("Étude", done.toString() + " / " + studyDays.size + " journées validées.") }
         item { Info("Calendrier hébraïque complet", "Les dates de la paracha Bereshit et son passage d’étude sont intégrés ; le calendrier hébraïque complet sera traité ensuite.") }
