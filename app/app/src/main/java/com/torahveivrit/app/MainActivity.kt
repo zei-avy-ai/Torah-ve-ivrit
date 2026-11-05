@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -102,7 +103,7 @@ private fun enrichFrench(verses: List<Verse>, context: Context): List<Verse> {
 
 private val parashot = listOf(
     "חַיֵּי שָׂרָה — Haye Sarah", "נח — Noa'h", "לך־לך — Lekh Lekha", "וירא — Vayera",
-                "I Rois 1:1–31\n\nRéférence associée à Haye Sarah dans le calendrier de diaspora. La variante exacte du rite séfarade tunisien doit être confirmée avant intégration du texte complet."
+    "חַיֵּי שָׂרָה — Haye Sarah", "תּוֹלְדֹת — Toldot", "וַיֵּצֵא — Vayetze", "וַיִּשְׁלַח — Vayishlah",
     "וישב — Vayeshev", "מקץ — Mikets", "ויגש — Vayigash", "ויחי — Vayehi",
     "שמות — Shemot", "וארא — Vaera", "בא — Bo", "בשלח — Beshalah",
     "יתרו — Yitro", "משפטים — Mishpatim", "תרומה — Terumah", "תצוה — Tetsaveh",
