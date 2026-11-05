@@ -101,7 +101,7 @@ private fun enrichFrench(verses: List<Verse>, context: Context): List<Verse> {
 }
 
 private val parashot = listOf(
-    "בראשית — Bereshit", "נח — Noa'h", "לך־לך — Lekh Lekha", "וירא — Vayera",
+    "חַיֵּי שָׂרָה — Haye Sarah", "נח — Noa'h", "לך־לך — Lekh Lekha", "וירא — Vayera",
     "חיי שרה — Haye Sarah", "תולדות — Toldot", "ויצא — Vayetze", "וישלח — Vayishlah",
     "וישב — Vayeshev", "מקץ — Mikets", "ויגש — Vayigash", "ויחי — Vayehi",
     "שמות — Shemot", "וארא — Vaera", "בא — Bo", "בשלח — Beshalah",
