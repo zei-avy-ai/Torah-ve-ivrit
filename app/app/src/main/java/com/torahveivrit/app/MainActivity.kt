@@ -262,8 +262,8 @@ private fun Haftarah(m: Modifier) {
         }
         item {
             Info(
-                "בראשית — Bereshit",
-                "Isaïe 42:5–21\n\nLecture séfarade indiquée pour Bereshit. Le texte hébreu et sa traduction juive seront intégrés après vérification de la source et de l'édition."
+                "חַיֵּי שָׂרָה — Haye Sarah",
+                "I Rois 1:1–31\\n\\nRéférence associée à Haye Sarah dans le calendrier de diaspora. La variante exacte du rite séfarade tunisien doit être confirmée avant intégration du texte complet."
             )
         }
         item {
