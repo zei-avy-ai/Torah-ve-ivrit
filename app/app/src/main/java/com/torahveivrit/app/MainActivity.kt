@@ -258,7 +258,7 @@ private fun Haftarah(m: Modifier) {
     LazyColumn(m.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         item {
             Text("Haftarah", style = MaterialTheme.typography.headlineSmall)
-            Text("Référence séfarade pour la paracha Bereshit")
+            Text("Haftarah de Haye Sarah — référence à vérifier selon le minhag local")
         }
         item {
             Info(
@@ -318,7 +318,7 @@ private fun Siddur(m: Modifier) {
             Card(Modifier.fillMaxWidth()) {
                 Column(Modifier.padding(16.dp)) {
                     Text("שמע ישראל ה׳ אלהינו ה׳ אחד", style = MaterialTheme.typography.headlineSmall, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.End)
-                    Spacer(Modifier.height(8.dp)); Text("Texte hébreu du rite sélectionné.")
+                    Spacer(Modifier.height(8.dp)); Text("Extrait du שמע ישראל. Ce module n'est pas encore un sidour complet ; les נוסח et variantes seront ajoutés après vérification auprès de sources séfarades tunisiennes.")
                 }
             }
         }
