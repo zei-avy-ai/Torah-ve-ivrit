@@ -1,357 +1,41 @@
 package com.torahveivrit.app
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import android.content.Context
+import android.webkit.WebChromeClient
+import android.webkit.WebResourceRequest
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.*
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import org.json.JSONObject
-
-private data class Section(val title: String, val icon: androidx.compose.ui.graphics.vector.ImageVector)
-private val sections = listOf(
-    Section("Accueil", Icons.Filled.Home), Section("Torah", Icons.Filled.MenuBook),
-    Section("Haftarah", Icons.Filled.Star), Section("Exercice", Icons.Filled.School),
-    Section("Bilan", Icons.Filled.CheckCircle), Section("Sidour", Icons.Filled.Translate),
-    Section("Calendrier", Icons.Filled.CalendarMonth)
-)
-private data class Verse(val number: Int, val hebrew: String, val french: String = "")
-private data class ParashaInfo(
-    val hebrew: String,
-    val french: String,
-    val reference: String,
-    val date: String,
-    val haftarahSephardic: String
-)
-// Calendrier de diaspora 5787 : dates à maintenir à partir d'une source de calendrier vérifiée.
-private val upcomingParashot5787 = listOf(
-    ParashaInfo("חַיֵּי שָׂרָה", "Haye Sarah", "Genèse 23:1–25:18", "7 novembre 2026", "I Rois 1:1–31"),
-    ParashaInfo("תּוֹלְדֹת", "Toldot", "Genèse 25:19–28:9", "14 novembre 2026", "Malachie 1:1–2:7"),
-    ParashaInfo("וַיֵּצֵא", "Vayetze", "Genèse 28:10–32:3", "21 novembre 2026", "Osée 12:13–14:10"),
-    ParashaInfo("וַיִּשְׁלַח", "Vayishlah", "Genèse 32:4–36:43", "28 novembre 2026", "Obadia 1:1–21")
-)
-
-private val bereshit1 = listOf(
-    Verse(1001, "בְּרֵאשִׁית בָּרָא אֱלֹהִים אֵת הַשָּׁמַיִם וְאֵת הָאָרֶץ.", "Au commencement, Dieu avait créé le ciel et la terre."),
-    Verse(1002, "וְהָאָרֶץ הָיְתָה תֹהוּ וָבֹהוּ, וְחֹשֶׁךְ עַל־פְּנֵי תְהוֹם; וְרוּחַ אֱלֹהִים מְרַחֶפֶת עַל־פְּנֵי הַמָּיִם.", "Or la terre n’était que solitude et chaos ; des ténèbres couvraient la face de l’abîme, et le souffle de Dieu planait sur la face des eaux."),
-    Verse(1003, "וַיֹּאמֶר אֱלֹהִים: יְהִי אוֹר; וַיְהִי־אוֹר.", "Dieu dit : « Que la lumière soit ! » Et la lumière fut."),
-    Verse(1004, "וַיַּרְא אֱלֹהִים אֶת־הָאוֹר כִּי־טוֹב; וַיַּבְדֵּל אֱלֹהִים בֵּין הָאוֹר וּבֵין הַחֹשֶׁךְ.", "Dieu considéra que la lumière était bonne, et il établit une distinction entre la lumière et les ténèbres."),
-    Verse(1005, "וַיִּקְרָא אֱלֹהִים לָאוֹר יוֹם, וְלַחֹשֶׁךְ קָרָא לָיְלָה; וַיְהִי־עֶרֶב וַיְהִי־בֹקֶר, יוֹם אֶחָד.", "Dieu appela la lumière jour, et les ténèbres, il les appela Nuit. Il fut soir, il fut matin, — un jour."),
-    Verse(1006, "וַיֹּאמֶר אֱלֹהִים, יְהִי רָקִיעַ בְּתוֹךְ הַמָּיִם, וִיהִי מַבְדִּיל, בֵּין מַיִם לָמָיִם.", "Dieu dit : « Qu’un espace s’étende au milieu des eaux, et forme une barrière entre les unes et les autres. »"),
-    Verse(1007, "וַיַּעַשׂ אֱלֹהִים, אֶת־הָרָקִיעַ, וַיַּבְדֵּל בֵּין הַמַּיִם אֲשֶׁר מִתַּחַת לָרָקִיעַ, וּבֵין הַמַּיִם אֲשֶׁר מֵעַל לָרָקִיעַ; וַיְהִי־כֵן.", "Dieu fit l’espace, opéra une séparation entre les eaux qui sont au-dessous et les eaux qui sont au-dessus, et cela demeura ainsi."),
-    Verse(1008, "וַיִּקְרָא אֱלֹהִים לָרָקִיעַ, שָׁמָיִם; וַיְהִי־עֶרֶב וַיְהִי־בֹקֶר, יוֹם שֵׁנִי.", "Dieu nomma cet espace le Ciel. Le soir se fit, le matin se fit, — second jour."),
-    Verse(1009, "וַיֹּאמֶר אֱלֹהִים, יִקָּווּ הַמַּיִם מִתַּחַת הַשָּׁמַיִם אֶל־מָקוֹם אֶחָד, וְתֵרָאֶה הַיַּבָּשָׁה; וַיְהִי־כֵן.", "Dieu dit : « Que les eaux répandues sous le ciel se réunissent sur un même point, et que le sol apparaisse. » Cela s’accomplit."),
-    Verse(1010, "וַיִּקְרָא אֱלֹהִים לַיַּבָּשָׁה אֶרֶץ, וּלְמִקְוֵה הַמַּיִם קָרָא יַמִּים; וַיַּרְא אֱלֹהִים כִּי־טוֹב.", "Dieu nomma le sol la Terre, et l’agglomération des eaux, il la nomma les Mers. Et Dieu considéra que c’était bien."),
-    Verse(1011, "וַיֹּאמֶר אֱלֹהִים, תַּדְשֵׁא הָאָרֶץ דֶּשֶׁא עֵשֶׂב מַזְרִיעַ זֶרַע, עֵץ פְּרִי עֹשֶׂה פְּרִי לְמִינוֹ, אֲשֶׁר זַרְעוֹ־בוֹ עַל־הָאָרֶץ; וַיְהִי־כֵן.", "Dieu dit : « Que la terre produise des végétaux, savoir : des herbes renfermant une semence ; des arbres fruitiers portant, selon leur espèce, un fruit qui perpétue sa semence sur la terre. » Et cela s’accomplit."),
-    Verse(1012, "וַתּוֹצֵא הָאָרֶץ דֶּשֶׁא עֵשֶׂב מַזְרִיעַ זֶרַע לְמִינֵהוּ, וְעֵץ עֹשֶׂה־פְּרִי אֲשֶׁר זַרְעוֹ־בוֹ לְמִינֵהוּ; וַיַּרְא אֱלֹהִים כִּי־טוֹב.", "La terre donna naissance aux végétaux : aux herbes qui développent leur semence selon leur espèce, et aux arbres portant, selon leur espèce, un fruit qui renferme sa semence. Et Dieu considéra que c’était bien."),
-    Verse(1013, "וַיְהִי־עֶרֶב וַיְהִי־בֹקֶר, יוֹם שְׁלִישִׁי.", "Le soir se fit, le matin se fit, — troisième jour.")
-)
-
-private fun loadBereshitFromAsset(context: Context): List<Verse> {
-    return runCatching {
-        val json = context.assets.open("genesis_hebrew.json").bufferedReader().use { it.readText() }
-        val chapters = JSONObject(json).getJSONArray("chapters")
-        val result = mutableListOf<Verse>()
-        for (chapterIndex in 0 until minOf(6, chapters.length())) {
-            val verses = chapters.getJSONArray(chapterIndex)
-            val maxVerse = if (chapterIndex == 5) minOf(8, verses.length()) else verses.length()
-            for (verseIndex in 0 until maxVerse) {
-                val item = verses.getJSONObject(verseIndex)
-                result.add(
-                    Verse(
-                        number = (chapterIndex + 1) * 1000 + verseIndex + 1,
-                        hebrew = item.getString("hebrew")
-                    )
-                )
-            }
-        }
-        result
-    }.getOrDefault(bereshit1)
-}
-
-private fun loadFrenchBereshit(context: Context): Map<String, String> {
-    return runCatching {
-        val json = context.assets.open("genesis_french_zadoc.json").bufferedReader().use { it.readText() }
-        val translations = JSONObject(json).getJSONObject("translations")
-        buildMap {
-            val keys = translations.keys()
-            while (keys.hasNext()) {
-                val key = keys.next()
-                put(key, translations.getString(key))
-            }
-        }
-    }.getOrDefault(emptyMap())
-}
-
-private fun enrichFrench(verses: List<Verse>, context: Context): List<Verse> {
-    val french = loadFrenchBereshit(context)
-    return verses.map { verse ->
-        val chapter = verse.number / 1000
-        val number = verse.number % 1000
-        verse.copy(french = french["$chapter:$number"].orEmpty())
-    }
-}
-
-private val parashot = listOf(
-    "בְּרֵאשִׁית — Bereshit", "נֹחַ — Noa'h", "לֶךְ־לְךָ — Lekh Lekha", "וַיֵּרָא — Vayera",
-    "חַיֵּי שָׂרָה — Haye Sarah", "תּוֹלְדֹת — Toldot", "וַיֵּצֵא — Vayetze", "וַיִּשְׁלַח — Vayishlah",
-    "וַיֵּשֶׁב — Vayeshev", "מִקֵּץ — Mikets", "וַיִּגַּשׁ — Vayigash", "וַיְחִי — Vayehi",
-    "שְׁמוֹת — Shemot", "וָאֵרָא — Vaera", "בֹּא — Bo", "בְּשַׁלַּח — Beshalah",
-    "יִתְרוֹ — Yitro", "מִשְׁפָּטִים — Mishpatim", "תְּרוּמָה — Terumah", "תְּצַוֶּה — Tetsaveh",
-    "כִּי תִשָּׂא — Ki Tissa", "וַיַּקְהֵל — Vayakhel", "פְּקוּדֵי — Pekudei",
-    "וַיִּקְרָא — Vayikra", "צַו — Tsav", "שְּׁמִינִי — Shemini", "תַזְרִיעַ — Tazria",
-    "מְצֹרָע — Metsora", "אַחֲרֵי מוֹת — Aharei Mot", "קְדֹשִׁים — Kedoshim",
-    "אֱמוֹר — Emor", "בְּהַר — Behar", "בְּחֻקֹּתַי — Behoukotaï", "בְּמִדְבַּר — Bamidbar",
-    "נָשֹׂא — Nasso", "בְּהַעֲלֹתְךָ — Behaalotekha", "שְׁלַח־לְךָ — Shelah Lekha",
-    "קֹרַח — Korah", "חֻקַּת — Houkat", "בָּלָק — Balak", "פִּינְחָס — Pinhas",
-    "מַטּוֹת — Matot", "מַסְעֵי — Massei", "דְּבָרִים — Devarim", "וָאֶתְחַנַּן — Vaethanan",
-    "עֵקֶב — Ekev", "רְאֵה — Reeh", "שֹׁפְטִים — Shoftim", "כִּי־תֵצֵא — Ki Tetse",
-    "כִּי־תָבוֹא — Ki Tavo", "נִצָּבִים — Nitsavim", "וַיֵּלֶךְ — Vayelekh",
-    "הַאֲזִינוּ — Haazinou", "וְזֹאת הַבְּרָכָה — Vezot Haberakha"
-)
-
-private val studyDays = listOf(
-    "Jour 1 — Lecture" to "Lire le passage hébreu avec ניקוד à voix haute.",
-    "Jour 2 — Vocabulaire" to "Repérer les mots nouveaux et leurs racines.",
-    "Jour 3 — Compréhension" to "Relire le passage et identifier le sens des phrases.",
-    "Jour 4 — Traduction" to "Comparer l'hébreu à la traduction française juive.",
-    "Jour 5 — Révision" to "Revoir le vocabulaire et les passages étudiés.",
-    "Jour 6 — Bilan" to "Révision générale et exercice de la semaine."
-)
-
-private fun verseRangeForDay(day: Int, totalVerses: Int): String {
-    if (day >= 5 || totalVerses == 0) return "Révision de l'ensemble du passage"
-    val studyDaysCount = 5
-    val base = totalVerses / studyDaysCount
-    val remainder = totalVerses % studyDaysCount
-    var start = 1
-    for (i in 0 until day) start += base + if (i < remainder) 1 else 0
-    val count = base + if (day < remainder) 1 else 0
-    val end = start + count - 1
-    return "Versets $start–$end"
-}
 
 class MainActivity : ComponentActivity() {
+    private lateinit var webView: WebView
+
+    @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent { MaterialTheme { Surface(Modifier.fillMaxSize()) { TorahVeIvritApp() } } }
+        webView = WebView(this)
+        webView.settings.apply {
+            javaScriptEnabled = true
+            domStorageEnabled = true
+            databaseEnabled = true
+            allowFileAccess = true
+            allowContentAccess = true
+            setSupportZoom(true)
+            builtInZoomControls = false
+            displayZoomControls = false
+        }
+        webView.webViewClient = object : WebViewClient() {
+            override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean = false
+        }
+        webView.webChromeClient = WebChromeClient()
+        setContentView(webView)
+        webView.loadUrl("file:///android_asset/web/index.html")
     }
-}
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun TorahVeIvritApp() {
-    var selected by remember { mutableIntStateOf(0) }
-    val context = LocalContext.current
-    val prefs = remember(context) { context.getSharedPreferences("progress", Context.MODE_PRIVATE) }
-    var completed by remember { mutableStateOf((0 until studyDays.size).map { prefs.getBoolean("day_" + it, false) }) }
-    fun toggleDay(index: Int) {
-        val next = completed.toMutableList()
-        next[index] = !next[index]
-        completed = next
-        prefs.edit().putBoolean("day_" + index, next[index]).apply()
-    }
-    Scaffold(
-        topBar = { TopAppBar(title = {
-            Column { Text("תורה ועברית"); Text(sections[selected].title, style = MaterialTheme.typography.labelMedium) }
-        }) },
-        bottomBar = { NavigationBar {
-            sections.forEachIndexed { i, s ->
-                NavigationBarItem(selected == i, { selected = i }, { Icon(s.icon, s.title) }, label = { Text(s.title) })
-            }
-        } }
-    ) { p ->
-        when (selected) {
-            0 -> Home(Modifier.padding(p), completed)
-            1 -> Study("Torah", Modifier.padding(p), completed, ::toggleDay)
-            2 -> Haftarah(Modifier.padding(p))
-            3 -> Exercise(Modifier.padding(p))
-            4 -> Review(Modifier.padding(p), completed)
-            5 -> Siddur(Modifier.padding(p))
-            else -> Calendar(Modifier.padding(p), completed)
-        }
-    }
-}
-
-@Composable
-private fun Home(m: Modifier, completed: List<Boolean>) {
-    val context = LocalContext.current
-    val bereshit = remember { enrichFrench(loadBereshitFromAsset(context), context) }
-    val done = completed.count { it }
-    val nextDay = completed.indexOfFirst { !it }
-    LazyColumn(m.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        item { Text("תורה ועברית", style = MaterialTheme.typography.headlineSmall); Text("Apprendre l'hébreu biblique au rythme de la paracha") }
-        item { Info("Cycle des parachiot", parashot.size.toString() + " parachiot référencées dans le cycle annuel.") }
-        item {
-            val next = upcomingParashot5787.first()
-            Info(
-                "Prochaine paracha",
-                next.hebrew + " — " + next.french + " • " + next.date + "\n" +
-                    next.reference + "\nHaftarah séfarade : " + next.haftarahSephardic
-            )
-        }
-        item { Info("Leçon disponible", "Le passage de Bereshit 1:1–6:8 est intégré en hébreu vocalisé. La traduction française juive de Zadoc Kahn est intégrée pour l’ensemble de Bereshit 1:1–6:8. La répartition des versets est calculée automatiquement sur 5 jours d'étude, avec le 6e jour réservé au bilan.") }
-        item { Info("Programme du jour", if (nextDay >= 0) studyDays[nextDay].first + " — " + verseRangeForDay(nextDay, bereshit.size) else "Semaine terminée") }
-        item {
-            Card(Modifier.fillMaxWidth()) {
-                Column(Modifier.padding(16.dp)) {
-                    Text("Progression", style = MaterialTheme.typography.titleMedium)
-                    Spacer(Modifier.height(8.dp))
-                    LinearProgressIndicator(progress = done.toFloat() / studyDays.size, modifier = Modifier.fillMaxWidth())
-                    Spacer(Modifier.height(6.dp))
-                    Text(done.toString() + " / " + studyDays.size + " journées validées")
-                }
-            }
-        }
-        item { Info("Sources", "Textes juifs et traductions juives uniquement. Hébreu vocalisé : texte massorétique issu de l’export Sefaria. Traduction française : Bible du Rabbinat sous la direction de Zadoc Kahn, édition originale 1899.") }
-    }
-}
-
-@Composable
-private fun Study(title: String, m: Modifier, completed: List<Boolean>, onToggle: (Int) -> Unit) {
-    val context = LocalContext.current
-    val bereshit = remember { enrichFrench(loadBereshitFromAsset(context), context) }
-    LazyColumn(m.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        item { Text(title, style = MaterialTheme.typography.headlineSmall); Text("Paracha בראשית — programme en 6 jours") }
-        item { Info("Répartition automatique", "Les versets actuellement disponibles sont répartis sur 5 journées d’étude, puis le 6e jour est consacré au bilan. La répartition est calculée sur l’ensemble de Bereshit 1:1–6:8.") }
-        items(studyDays.size) { i ->
-            Card(Modifier.fillMaxWidth()) {
-                Row(Modifier.fillMaxWidth().padding(16.dp)) {
-                    Column(Modifier.weight(1f)) {
-                        Text(studyDays[i].first, style = MaterialTheme.typography.titleMedium)
-                        Spacer(Modifier.height(4.dp))
-                        Text(studyDays[i].second)
-                        Spacer(Modifier.height(4.dp))
-                        Text(verseRangeForDay(i, bereshit.size), style = MaterialTheme.typography.labelMedium)
-                    }
-                    Spacer(Modifier.width(8.dp))
-                    Checkbox(checked = completed[i], onCheckedChange = { onToggle(i) })
-                }
-            }
-        }
-        items(bereshit.size) { i ->
-            val verse = bereshit[i]
-            Card(Modifier.fillMaxWidth()) {
-                Column(Modifier.padding(16.dp)) {
-                    Text("בראשית " + (verse.number / 1000) + ":" + (verse.number % 1000), style = MaterialTheme.typography.labelLarge)
-                    Spacer(Modifier.height(6.dp))
-                    Text(verse.hebrew, textAlign = TextAlign.End, modifier = Modifier.fillMaxWidth())
-                    Spacer(Modifier.height(8.dp))
-                    if (verse.french.isNotBlank()) Text(verse.french) else Text("Traduction française juive : intégration en cours.", style = MaterialTheme.typography.labelSmall)
-                }
-            }
-        }
-        item { Info("Source", "Bible du Rabbinat, sous la direction de Zadoc Kahn, édition originale 1899. Texte français du domaine public ; source : Bible du Rabbinat, Zadoc Kahn, 1899, consultée via Wikisource.") }
-    }
-}
-
-@Composable
-private fun Haftarah(m: Modifier) {
-    LazyColumn(m.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        item {
-            Text("Haftarah", style = MaterialTheme.typography.headlineSmall)
-            Text("Haftarah de Haye Sarah — référence à vérifier selon le minhag local")
-        }
-        item {
-            Info(
-                "חַיֵּי שָׂרָה — Haye Sarah",
-                "I Rois 1:1–31\\n\\nRéférence associée à Haye Sarah dans le calendrier de diaspora. La variante exacte du rite séfarade tunisien doit être confirmée avant intégration du texte complet."
-            )
-        }
-        item {
-            Info(
-                "Principe de l'application",
-                "Aucun texte non vérifié n'est ajouté. Les contenus doivent provenir de sources juives identifiées et respecter la priorité séfarade tunisienne."
-            )
-        }
-    }
-}
-
-@Composable
-private fun Exercise(m: Modifier) {
-    var answer by remember { mutableStateOf("") }
-    var checked by remember { mutableStateOf(false) }
-    LazyColumn(m.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        item { Text("Exercice de la semaine", style = MaterialTheme.typography.headlineSmall) }
-        item { Info("Lecture", "Lis à voix haute בראשית 1:1–13 avec ניקוד, puis compare avec la traduction française.") }
-        item {
-            Card(Modifier.fillMaxWidth()) {
-                Column(Modifier.padding(16.dp)) {
-                    Text("בְּרֵאשִׁית בָּרָא אֱלֹהִים", textAlign = TextAlign.End, modifier = Modifier.fillMaxWidth())
-                    Spacer(Modifier.height(6.dp))
-                    Text("Exercice de vocabulaire : identifie le mot אֱלֹהִים et son sens.", textAlign = TextAlign.End, modifier = Modifier.fillMaxWidth())
-                    Spacer(Modifier.height(12.dp)); Text("Que signifie « אלהים » ?")
-                    OutlinedTextField(value = answer, onValueChange = { answer = it }, modifier = Modifier.fillMaxWidth(), singleLine = true)
-                    Spacer(Modifier.height(8.dp))
-                    Button(onClick = { checked = true }) { Text("Vérifier") }
-                    if (checked) { Spacer(Modifier.height(8.dp)); Text(if (answer.trim().lowercase() in listOf("dieu", "god")) "Correct." else "Réponse attendue : Dieu.") }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun Review(m: Modifier, completed: List<Boolean>) {
-    val done = completed.count { it }
-    Page(m, "Bilan et révision", "", listOf(
-        "Progression" to (done.toString() + " / " + studyDays.size + " journées validées."),
-        "Objectif" to "Terminer les 6 journées puis revoir les passages difficiles.",
-        "Lexique" to "Le lexique sera alimenté directement depuis les leçons."
-    ))
-}
-
-@Composable
-private fun Siddur(m: Modifier) {
-    LazyColumn(m.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        item { Text("Sidour", style = MaterialTheme.typography.headlineSmall) }
-        item { Info("Minhag", "Priorité au minhag séfarade tunisien, puis séfarade israélien.") }
-        item {
-            Card(Modifier.fillMaxWidth()) {
-                Column(Modifier.padding(16.dp)) {
-                    Text("שמע ישראל ה׳ אלהינו ה׳ אחד", style = MaterialTheme.typography.headlineSmall, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.End)
-                    Spacer(Modifier.height(8.dp)); Text("Extrait du שמע ישראל. Ce module n'est pas encore un sidour complet ; les נוסח et variantes seront ajoutés après vérification auprès de sources séfarades tunisiennes.")
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun Calendar(m: Modifier, completed: List<Boolean>) {
-    val done = completed.count { it }
-    LazyColumn(m.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        item { Text("Calendrier", style = MaterialTheme.typography.headlineSmall) }
-        item { Info("5787 — prochaines parachiot (diaspora)", upcomingParashot5787.joinToString("\n") { it.date + " — " + it.french + " (" + it.reference + ")" }) }
-        item { Info("Cycle de lecture", "Les dates affichées suivent le calendrier de diaspora 5787. La paracha est lue le Chabbat indiqué.") }
-        item { Info("Étude", done.toString() + " / " + studyDays.size + " journées validées.") }
-        item { Info("Calendrier hébraïque complet", "Les dates de la paracha Bereshit et son passage d’étude sont intégrés ; le calendrier hébraïque complet sera traité ensuite.") }
-    }
-}
-
-@Composable
-private fun Page(m: Modifier, title: String, subtitle: String, cards: List<Pair<String, String>>) {
-    LazyColumn(m.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        item { Text(title, style = MaterialTheme.typography.headlineSmall); if (subtitle.isNotBlank()) Text(subtitle) }
-        items(cards.size) { i -> Info(cards[i].first, cards[i].second) }
-    }
-}
-
-@Composable
-private fun Info(title: String, body: String) {
-    Card(Modifier.fillMaxWidth()) {
-        Column(Modifier.padding(16.dp)) {
-            Text(title, style = MaterialTheme.typography.titleMedium)
-            Spacer(Modifier.height(4.dp)); Text(body)
-        }
+    @Deprecated("Deprecated in Java")
+    override fun onBackPressed() {
+        if (::webView.isInitialized && webView.canGoBack()) webView.goBack()
+        else super.onBackPressed()
     }
 }
