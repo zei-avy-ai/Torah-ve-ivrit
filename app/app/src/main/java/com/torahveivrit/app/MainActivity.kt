@@ -102,20 +102,21 @@ private fun enrichFrench(verses: List<Verse>, context: Context): List<Verse> {
 }
 
 private val parashot = listOf(
-    "חַיֵּי שָׂרָה — Haye Sarah", "נח — Noa'h", "לך־לך — Lekh Lekha", "וירא — Vayera",
-    "וישב — Vayeshev", "מקץ — Mikets", "ויגש — Vayigash", "ויחי — Vayehi",
-    "שמות — Shemot", "וארא — Vaera", "בא — Bo", "בשלח — Beshalah",
-    "יתרו — Yitro", "משפטים — Mishpatim", "תרומה — Terumah", "תצוה — Tetsaveh",
-    "כי תשא — Ki Tissa", "ויקהל — Vayakhel", "פקודי — Pekudei",
-    "ויקרא — Vayikra", "צו — Tsav", "שמיני — Shemini", "תזריע — Tazria",
-    "מצורע — Metsora", "אחרי מות — Aharei Mot", "קדושים — Kedoshim",
-    "אמור — Emor", "בהר — Behar", "בחוקותי — Behoukotaï", "במדבר — Bamidbar",
-    "נשא — Nasso", "בהעלותך — Behaalotekha", "שלח לך — Shelah Lekha",
-    "קרח — Korah", "חקת — Houkat", "בלק — Balak", "פינחס — Pinhas",
-    "מטות — Matot", "מסעי — Massei", "דברים — Devarim", "ואתחנן — Vaethanan",
-    "עקב — Ekev", "ראה — Reeh", "שופטים — Shoftim", "כי תצא — Ki Tetse",
-    "כי תבוא — Ki Tavo", "נצבים — Nitsavim", "וילך — Vayelekh",
-    "האזינו — Haazinou", "וזאת הברכה — Vezot Haberakha"
+    "בְּרֵאשִׁית — Bereshit", "נֹחַ — Noa'h", "לֶךְ־לְךָ — Lekh Lekha", "וַיֵּרָא — Vayera",
+    "חַיֵּי שָׂרָה — Haye Sarah", "תּוֹלְדֹת — Toldot", "וַיֵּצֵא — Vayetze", "וַיִּשְׁלַח — Vayishlah",
+    "וַיֵּשֶׁב — Vayeshev", "מִקֵּץ — Mikets", "וַיִּגַּשׁ — Vayigash", "וַיְחִי — Vayehi",
+    "שְׁמוֹת — Shemot", "וָאֵרָא — Vaera", "בֹּא — Bo", "בְּשַׁלַּח — Beshalah",
+    "יִתְרוֹ — Yitro", "מִשְׁפָּטִים — Mishpatim", "תְּרוּמָה — Terumah", "תְּצַוֶּה — Tetsaveh",
+    "כִּי תִשָּׂא — Ki Tissa", "וַיַּקְהֵל — Vayakhel", "פְּקוּדֵי — Pekudei",
+    "וַיִּקְרָא — Vayikra", "צַו — Tsav", "שְּׁמִינִי — Shemini", "תַזְרִיעַ — Tazria",
+    "מְצֹרָע — Metsora", "אַחֲרֵי מוֹת — Aharei Mot", "קְדֹשִׁים — Kedoshim",
+    "אֱמוֹר — Emor", "בְּהַר — Behar", "בְּחֻקֹּתַי — Behoukotaï", "בְּמִדְבַּר — Bamidbar",
+    "נָשֹׂא — Nasso", "בְּהַעֲלֹתְךָ — Behaalotekha", "שְׁלַח־לְךָ — Shelah Lekha",
+    "קֹרַח — Korah", "חֻקַּת — Houkat", "בָּלָק — Balak", "פִּינְחָס — Pinhas",
+    "מַטּוֹת — Matot", "מַסְעֵי — Massei", "דְּבָרִים — Devarim", "וָאֶתְחַנַּן — Vaethanan",
+    "עֵקֶב — Ekev", "רְאֵה — Reeh", "שֹׁפְטִים — Shoftim", "כִּי־תֵצֵא — Ki Tetse",
+    "כִּי־תָבוֹא — Ki Tavo", "נִצָּבִים — Nitsavim", "וַיֵּלֶךְ — Vayelekh",
+    "הַאֲזִינוּ — Haazinou", "וְזֹאת הַבְּרָכָה — Vezot Haberakha"
 )
 
 private val studyDays = listOf(
