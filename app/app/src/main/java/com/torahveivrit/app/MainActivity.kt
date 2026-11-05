@@ -102,7 +102,7 @@ private fun enrichFrench(verses: List<Verse>, context: Context): List<Verse> {
 
 private val parashot = listOf(
     "חַיֵּי שָׂרָה — Haye Sarah", "נח — Noa'h", "לך־לך — Lekh Lekha", "וירא — Vayera",
-    "חיי שרה — Haye Sarah", "תולדות — Toldot", "ויצא — Vayetze", "וישלח — Vayishlah",
+                "I Rois 1:1–31\n\nRéférence associée à Haye Sarah dans le calendrier de diaspora. La variante exacte du rite séfarade tunisien doit être confirmée avant intégration du texte complet."
     "וישב — Vayeshev", "מקץ — Mikets", "ויגש — Vayigash", "ויחי — Vayehi",
     "שמות — Shemot", "וארא — Vaera", "בא — Bo", "בשלח — Beshalah",
     "יתרו — Yitro", "משפטים — Mishpatim", "תרומה — Terumah", "תצוה — Tetsaveh",
